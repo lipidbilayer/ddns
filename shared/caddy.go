@@ -3,7 +3,6 @@ package shared
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 )
@@ -21,7 +20,7 @@ type Response struct {
 
 func (r *Response) handleHTTPError() error {
 	if r.StatusCode >= http.StatusBadRequest {
-		return errors.New("Bad status")
+		return fmt.Errorf("Bad status %s", r.Status)
 	}
 	return nil
 }
@@ -102,7 +101,7 @@ func (c *Caddy) SetReverseProxy(host *Host) error {
 	}
 
 	match := Match{
-		Host: []string{fmt.Sprintf("%s.%s", host.Hostname, c.domain)},
+		Host: []string{fmt.Sprintf("%s%s", host.Hostname, c.domain)},
 	}
 	request := &CaddyHostRoute{
 		ID:     host.Hostname,
@@ -110,7 +109,7 @@ func (c *Caddy) SetReverseProxy(host *Host) error {
 		Match:  []Match{match},
 	}
 
-	url := fmt.Sprintf("%s/config/apps/http/servers/srv0/routes", c.caddyAdminHost)
+	url := fmt.Sprintf("http://%s/config/apps/http/servers/srv0/routes", c.caddyAdminHost)
 	requestMethod := http.MethodPost
 	_, err := c.callAPI(url, requestMethod, request)
 	if err != nil {
@@ -121,7 +120,7 @@ func (c *Caddy) SetReverseProxy(host *Host) error {
 
 func (c *Caddy) UpdateReverseProxy(host *Host) error {
 	request := c.setUpstream(host)
-	url := fmt.Sprintf("%s/id/%s/handle/0/upstreams/", c.caddyAdminHost, host.Hostname)
+	url := fmt.Sprintf("http://%s/id/%s/handle/0/upstreams/", c.caddyAdminHost, host.Hostname)
 	requestMethod := http.MethodPatch
 	_, err := c.callAPI(url, requestMethod, request)
 	if err != nil {

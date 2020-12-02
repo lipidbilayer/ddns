@@ -80,7 +80,7 @@ func (f *Frontend) Run() error {
 			err := f.webEngine.SetReverseProxy(host)
 			if err != nil {
 				f.hosts.RemoveHost(host)
-				c.JSON(400, gin.H{"error": "Could not register host."})
+				c.JSON(400, gin.H{"error": err.Error()})
 				return
 			}
 		}
@@ -133,9 +133,11 @@ func (f *Frontend) Run() error {
 
 		if host.Port != "" {
 			if err = f.webEngine.UpdateReverseProxy(host); err != nil {
-				c.JSON(400, gin.H{
-					"error": "Could not update reverse proxy",
-				})
+				if err = f.webEngine.SetReverseProxy(host); err != nil {
+					c.JSON(400, gin.H{
+						"error": "Could not update reverse proxy",
+					})
+				}
 			}
 		}
 

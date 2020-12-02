@@ -1,3 +1,11 @@
 {
+    debug
     admin 0.0.0.0:{$DDNS_CADDY_ADMIN_PORT}
+}
+
+:80 {
+    @matcher {
+        host localhost
+    }
+    reverse_proxy @matcher  127.0.0.1
 }
