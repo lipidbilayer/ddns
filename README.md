@@ -12,12 +12,12 @@ host under the `d.pboehm.de` domain (e.g `test.d.pboehm.de`).
 of the [Pipe Backend](https://doc.powerdns.com/md/authoritative/backend-pipe/), which
 is far easier to deploy. It now serves both the frontend and the backend over HTTP using different ports.
 
-The old `ddns` source code can be found at the [legacy](https://github.com/pboehm/ddns/tree/legacy) tag.
+The old `ddns` source code can be found at the [legacy](https://github.com/lipidbilayer/ddns/tree/legacy) tag.
 
 **Security Notice**
 
 Please make sure that you use the latest available version of `ddns`, as it contains an important security
-fix for [an issue introduced in the rework](https://github.com/pboehm/ddns/issues/8).
+fix for [an issue introduced in the rework](https://github.com/lipidbilayer/ddns/issues/8).
 
 ## How can I update my IP if it changes?
 
@@ -31,23 +31,23 @@ An API similar to DynDNS/NO-IP has not been implemented yet.
 
 ### Requirements
 
-* A custom domain where the registrar allows setting `NS` records for subdomains. This is important because not all
+- A custom domain where the registrar allows setting `NS` records for subdomains. This is important because not all
   DNS providers support this.
-* A server with [docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/) installed
-* The following ports should be opened in the firewall:
-  * `53/udp`
-  * `80/tcp`
-  * `443/tcp`
+- A server with [docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/) installed
+- The following ports should be opened in the firewall:
+  - `53/udp`
+  - `80/tcp`
+  - `443/tcp`
 
 ### DNS-Setup
 
 For the domain you want to use with `ddns` (`example.net` in the following sections, please adjust this to your domain)
 you have to create the following two DNS records:
 
-* `ddns.example.net` as a `CNAME` or `A`/`AAAA` record pointing to the server `ddns` will be running on. This record
+- `ddns.example.net` as a `CNAME` or `A`/`AAAA` record pointing to the server `ddns` will be running on. This record
   will be used for accessing the `ddns` frontend in your browser or via `curl`. It is also the target for the
   corresponding `NS` record.
-* `d.example.net` as an `NS` record pointing to the previously created `ddns.example.net` record. This will delegate
+- `d.example.net` as an `NS` record pointing to the previously created `ddns.example.net` record. This will delegate
   all subdomains under `d.example.net` to the PowerDNS server running on `ddns.example.net`.
 
 ### `ddns`-Setup
@@ -69,8 +69,8 @@ cp docker-compose.override.yml.sample docker-compose.override.yml
 
 Please adjust the settings in `docker-compose.override.yml` marked with the `#<<< ....` comments as follows:
 
-* adjust the domain part in lines marked with `# <<< ADJUST DOMAIN` according to your DNS-Setup
-* insert your email address in lines marked with `# <<< INSERT EMAIL` which is required for getting certificates
+- adjust the domain part in lines marked with `# <<< ADJUST DOMAIN` according to your DNS-Setup
+- insert your email address in lines marked with `# <<< INSERT EMAIL` which is required for getting certificates
   from Lets Encrypt
 
 Finally execute the following `docker-compose` command, which creates 4 containers in detached mode which are also

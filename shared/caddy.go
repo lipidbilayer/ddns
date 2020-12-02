@@ -8,10 +8,6 @@ import (
 	"net/http"
 )
 
-const (
-	PORTPREFIX = "90"
-)
-
 type Caddy struct {
 	caddyAdminHost string
 	domain         string
@@ -135,7 +131,7 @@ func (c *Caddy) UpdateReverseProxy(host *Host) error {
 }
 
 func (c *Caddy) setUpstream(host *Host) []Upstreams {
-	dial := fmt.Sprintf("%s:%s%s", host.Ip, PORTPREFIX, host.Port)
+	dial := fmt.Sprintf("%s:%s", host.Ip, host.Port)
 	upstreams := Upstreams{Dial: dial}
 	return []Upstreams{upstreams}
 }

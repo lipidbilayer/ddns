@@ -2,7 +2,7 @@ FROM golang:alpine
 
 RUN apk add --no-cache git
 
-WORKDIR /go/src/github.com/pboehm/ddns
+WORKDIR /go/src/github.com/lipidbilayer/ddns
 COPY . .
 
 RUN GO111MODULE=on go get -d -v ./...
@@ -15,4 +15,5 @@ CMD /go/bin/ddns \
     --domain=${DDNS_DOMAIN} \
     --soa_fqdn=${DDNS_SOA_DOMAIN} \
     --redis=${DDNS_REDIS_HOST} \
-    --expiration-days=${DDNS_EXPIRATION_DAYS}
+    --expiration-days=${DDNS_EXPIRATION_DAYS} \
+    --caddy=${DDNS_CADDY_HOST}

@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/pboehm/ddns/backend"
-	"github.com/pboehm/ddns/frontend"
-	"github.com/pboehm/ddns/shared"
+	"github.com/lipidbilayer/ddns/backend"
+	"github.com/lipidbilayer/ddns/frontend"
+	"github.com/lipidbilayer/ddns/shared"
 	"golang.org/x/sync/errgroup"
 )
 

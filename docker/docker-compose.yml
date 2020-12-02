@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 
 services:
   ddns:
@@ -12,6 +12,7 @@ services:
       DDNS_DOMAIN: d.example.net
       DDNS_SOA_DOMAIN: ddns.example.net
       DDNS_REDIS_HOST: redis:6379
+      DDNS_CADDY_HOST: caddy:2019
 
   powerdns:
     restart: unless-stopped
@@ -26,3 +27,10 @@ services:
   redis:
     restart: unless-stopped
     image: redis:4-alpine
+
+  caddy:
+    restart: unless-stopped
+    image: caddy:latest
+    volumes:
+      - "${PWD}/caddy/Caddyfile:/etc/Caddyfile"
+      - "${PWD}/.caddy_mount:/root/.caddy"

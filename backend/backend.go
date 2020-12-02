@@ -1,10 +1,11 @@
 package backend
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/pboehm/ddns/shared"
 	"log"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/lipidbilayer/ddns/shared"
 )
 
 type Backend struct {

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/pboehm/ddns/shared"
+	"github.com/lipidbilayer/ddns/shared"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -9,7 +9,7 @@ import (
 	"regexp"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pboehm/ddns/shared"
+	"github.com/lipidbilayer/ddns/shared"
 )
 
 type Frontend struct {
@@ -53,7 +53,7 @@ func (f *Frontend) Run() error {
 		})
 	})
 
-	r.GET("/new/:hostname", func(c *gin.Context) {
+	r.GET("/new/:hostname/:port", func(c *gin.Context) {
 		hostname, valid := isValidHostname(c.Params.ByName("hostname"))
 
 		if !valid {

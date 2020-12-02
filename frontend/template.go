@@ -109,7 +109,7 @@ const indexTemplate string = `
             <div class="header">
                 <ul class="nav nav-pills pull-right">
                     <li class="active"><a href="#">Home</a></li>
-                    <li><a href="https://github.com/pboehm/ddns">
+                    <li><a href="https://github.com/lipidbilayer/ddns">
                         <i class="fa fa-github fa-lg"></i> Code</a></li>
                 </ul>
                 <h3 class="text-muted">DDNS</h3>
@@ -123,15 +123,23 @@ const indexTemplate string = `
 
                 <hr />
 
-                <form class="form-inline" role="form">
-                    <div id="hostname_input" class="form-group">
+                <form class="form-inline" role="form">                    
+                    <div id="hostname_input" class="form-group col-md-9 mb-9">
                         <div class="input-group">
                             <input id="hostname" class="form-control input-lg" type="text" placeholder="my-own-hostname">
                             <div class="input-group-addon input-lg">{{.domain}}</div>
                         </div>
                     </div>
-                </form>
 
+                    <div id="port_input" class="form-group col-md-3 mb-3">
+                        <div class="input-group">
+                            <div class="input-group-addon input-lg">:</div>
+                            <input id="port" class="form-control input-lg" type="text" placeholder="Port">
+                        </div>
+                    </div>
+
+                </form>
+                <div class="clearfix"></div>
                 <hr />
 
                 <input type="button" id="register" class="btn btn-primary disabled" value="Register Host" />
@@ -183,8 +191,9 @@ const indexTemplate string = `
 
                 $('#register').click(function() {
                     var hostname = $("#hostname").val();
+                    var port = $("#port").val();
 
-                    $.getJSON("/new/" + hostname, function( data ) {
+                    $.getJSON("/new/" + hostname + "/" + port, function( data ) {
                         console.log(data);
 
                         var host = location.protocol + '//' + location.host;

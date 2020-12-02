@@ -1,4 +1,4 @@
-module github.com/pboehm/ddns
+module github.com/lipidbilayer/ddns
 
 go 1.12
 

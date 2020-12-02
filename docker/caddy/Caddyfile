@@ -1,3 +1,3 @@
-"admin": {
-    "listen": "0.0.0.0:2019"
+{
+    admin 0.0.0.0:{$DDNS_CADDY_ADMIN_PORT}
 }
