@@ -59,7 +59,7 @@ func (l *HostLookup) Lookup(request *Request) (*Response, error) {
 		}
 
 		responseContent = host.Ip
-		if host.Port != "" {
+		if host.Port != "0" {
 			if server, err := l.hosts.GetHost("ddns"); err == nil {
 				responseContent = server.Ip
 			}

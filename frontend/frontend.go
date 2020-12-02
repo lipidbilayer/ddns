@@ -76,7 +76,7 @@ func (f *Frontend) Run() error {
 			return
 		}
 
-		if host.Port != "" {
+		if host.Port != "0" {
 			err := f.webEngine.SetReverseProxy(host)
 			if err != nil {
 				f.hosts.RemoveHost(host)
@@ -131,7 +131,7 @@ func (f *Frontend) Run() error {
 			})
 		}
 
-		if host.Port != "" {
+		if host.Port != "0" {
 			if err = f.webEngine.UpdateReverseProxy(host); err != nil {
 				if err = f.webEngine.SetReverseProxy(host); err != nil {
 					c.JSON(400, gin.H{

@@ -192,7 +192,9 @@ const indexTemplate string = `
                 $('#register').click(function() {
                     var hostname = $("#hostname").val();
                     var port = $("#port").val();
-
+                    if (port == ""){
+                        port="0";
+                    }
                     $.getJSON("/new/" + hostname + "/" + port, function( data ) {
                         console.log(data);
 
