@@ -2,9 +2,10 @@ package backend
 
 import (
 	"errors"
+	"testing"
+
 	"github.com/pboehm/ddns/shared"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 type testHostBackend struct {
@@ -25,12 +26,29 @@ func (b *testHostBackend) SetHost(host *shared.Host) error {
 	return nil
 }
 
+func (b *testHostBackend) RemoveHost(host *shared.Host) error {
+	return nil
+}
+
+type testReverseProxyBackend struct {
+}
+
+func (b *testReverseProxyBackend) SetReverseProxy(host *shared.Host) error {
+	return nil
+}
+
+func (b *testReverseProxyBackend) UpdateReverseProxy(host *shared.Host) error {
+	return nil
+}
+
 func buildLookup(domain string) (*shared.Config, *testHostBackend, *HostLookup) {
 	config := &shared.Config{
 		Verbose: false,
 		Domain:  domain,
 		SOAFqdn: "dns" + domain,
 	}
+
+	caddy := &testReverseProxyBackend{}
 
 	hosts := &testHostBackend{
 		hosts: map[string]*shared.Host{
@@ -52,7 +70,7 @@ func buildLookup(domain string) (*shared.Config, *testHostBackend, *HostLookup) 
 		},
 	}
 
-	return config, hosts, &HostLookup{config, hosts}
+	return config, hosts, &HostLookup{config, hosts, caddy}
 }
 
 func buildRequest(queryName, queryType string) *Request {

@@ -14,6 +14,7 @@ type Config struct {
 	ListenFrontend     string
 	ListenBackend      string
 	RedisHost          string
+	CaddyAdminHost     string
 }
 
 func (c *Config) Initialize() {
@@ -35,13 +36,15 @@ func (c *Config) Initialize() {
 	flag.IntVar(&c.HostExpirationDays, "expiration-days", 10,
 		"The number of days after a host is released when it is not updated")
 
+	flag.StringVar(&c.CaddyAdminHost, "caddy", ":2019",
+		"The caddy api that should be used")
+
 	flag.BoolVar(&c.Verbose, "verbose", false,
 		"Be more verbose")
 }
 
 func (c *Config) Validate() {
 	flag.Parse()
-
 	if c.Domain == "" {
 		log.Fatal("You have to supply the domain via --domain=DOMAIN")
 	} else if !strings.HasPrefix(c.Domain, ".") {

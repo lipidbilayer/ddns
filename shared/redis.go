@@ -2,8 +2,9 @@ package shared
 
 import (
 	"errors"
-	"github.com/garyburd/redigo/redis"
 	"time"
+
+	"github.com/garyburd/redigo/redis"
 )
 
 type RedisBackend struct {
@@ -73,6 +74,19 @@ func (r *RedisBackend) SetHost(host *Host) error {
 	}
 
 	if _, err = conn.Do("EXPIRE", host.Hostname, r.expirationSeconds); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *RedisBackend) RemoveHost(host *Host) error {
+	conn := r.pool.Get()
+	defer conn.Close()
+
+	var err error
+
+	if _, err = conn.Do("DEL", host.Hostname); err != nil {
 		return err
 	}
 

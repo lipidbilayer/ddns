@@ -2,24 +2,27 @@ package frontend
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/pboehm/ddns/shared"
 	"html/template"
 	"log"
 	"net"
 	"net/http"
 	"regexp"
+
+	"github.com/gin-gonic/gin"
+	"github.com/pboehm/ddns/shared"
 )
 
 type Frontend struct {
-	config *shared.Config
-	hosts  shared.HostBackend
+	config    *shared.Config
+	hosts     shared.HostBackend
+	webEngine shared.ReverseProxyBackend
 }
 
-func NewFrontend(config *shared.Config, hosts shared.HostBackend) *Frontend {
+func NewFrontend(config *shared.Config, hosts shared.HostBackend, webEngine shared.ReverseProxyBackend) *Frontend {
 	return &Frontend{
-		config: config,
-		hosts:  hosts,
+		config:    config,
+		hosts:     hosts,
+		webEngine: webEngine,
 	}
 }
 
@@ -65,12 +68,21 @@ func (f *Frontend) Run() error {
 			return
 		}
 
-		host := &shared.Host{Hostname: hostname, Ip: "127.0.0.1"}
+		host := &shared.Host{Hostname: hostname, Ip: "127.0.0.1", Port: c.Params.ByName("port")}
 		host.GenerateAndSetToken()
 
 		if err = f.hosts.SetHost(host); err != nil {
 			c.JSON(400, gin.H{"error": "Could not register host."})
 			return
+		}
+
+		if host.Port != "" {
+			err := f.webEngine.SetReverseProxy(host)
+			if err != nil {
+				f.hosts.RemoveHost(host)
+				c.JSON(400, gin.H{"error": "Could not register host."})
+				return
+			}
 		}
 
 		c.JSON(200, gin.H{
@@ -117,6 +129,14 @@ func (f *Frontend) Run() error {
 			c.JSON(400, gin.H{
 				"error": "Could not update registered IP address",
 			})
+		}
+
+		if host.Port != "" {
+			if err = f.webEngine.UpdateReverseProxy(host); err != nil {
+				c.JSON(400, gin.H{
+					"error": "Could not update reverse proxy",
+				})
+			}
 		}
 
 		c.JSON(200, gin.H{

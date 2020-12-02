@@ -3,9 +3,10 @@ package backend
 import (
 	"errors"
 	"fmt"
-	"github.com/pboehm/ddns/shared"
 	"strings"
 	"time"
+
+	"github.com/pboehm/ddns/shared"
 )
 
 type Request struct {
@@ -25,12 +26,13 @@ type Response struct {
 }
 
 type HostLookup struct {
-	config *shared.Config
-	hosts  shared.HostBackend
+	config    *shared.Config
+	hosts     shared.HostBackend
+	webEngine shared.ReverseProxyBackend
 }
 
-func NewHostLookup(config *shared.Config, hostsBackend shared.HostBackend) *HostLookup {
-	return &HostLookup{config, hostsBackend}
+func NewHostLookup(config *shared.Config, hostsBackend shared.HostBackend, caddy shared.ReverseProxyBackend) *HostLookup {
+	return &HostLookup{config, hostsBackend, caddy}
 }
 
 func (l *HostLookup) Lookup(request *Request) (*Response, error) {

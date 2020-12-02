@@ -10,6 +10,7 @@ import (
 type Host struct {
 	Hostname string `redis:"-"`
 	Ip       string `redis:"ip"`
+	Port     string `redis:"port"`
 	Token    string `redis:"token"`
 }
 
@@ -33,4 +34,11 @@ type HostBackend interface {
 	GetHost(string) (*Host, error)
 
 	SetHost(*Host) error
+
+	RemoveHost(*Host) error
+}
+
+type ReverseProxyBackend interface {
+	SetReverseProxy(*Host) error
+	UpdateReverseProxy(*Host) error
 }
