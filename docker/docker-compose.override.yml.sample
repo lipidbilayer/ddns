@@ -17,7 +17,7 @@ services:
 
   caddy:
     restart: unless-stopped
-    image: abiosoft/caddy:latest
+    image: caddy:latest
     depends_on:
       - ddns
     environment:
